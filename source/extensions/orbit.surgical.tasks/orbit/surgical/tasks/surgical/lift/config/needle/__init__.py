@@ -70,6 +70,13 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": ik_rel_env_cfg.NeedleLiftEnvCfg,
         "rsl_rl_cfg_entry_point": agents.rsl_rl_cfg.LiftNeedlePPORunnerCfg,
+        "robomimic_bc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json",
+        "robomimic_bcq_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json",
+        "robomimic_cql_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json",
+        "robomimic_iris_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json",
+        "robomimic_iql_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iql.json",
+        "robomimic_gl_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/gl.json",
+        "robomimic_hbc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json",
     },
     disable_env_checker=True,
 )
@@ -80,6 +87,16 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": ik_rel_env_cfg.NeedleLiftEnvCfg_PLAY,
         "rsl_rl_cfg_entry_point": agents.rsl_rl_cfg.LiftNeedlePPORunnerCfg,
+        "robomimic_bc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json",
+        "robomimic_bcq_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json",
+        "robomimic_cql_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json",
+        "robomimic_iris_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json",
+        "robomimic_iql_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iql.json",
+        "robomimic_gl_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/gl.json",
+        "robomimic_hbc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json",
     },
     disable_env_checker=True,
 )
+
+
+

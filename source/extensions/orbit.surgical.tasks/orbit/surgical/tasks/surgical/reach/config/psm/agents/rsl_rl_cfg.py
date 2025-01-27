@@ -15,10 +15,10 @@ from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
 @configclass
 class PSMReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 64
-    max_iterations = 2000
+    max_iterations = 2001
     save_interval = 50
     experiment_name = "psm_reach"
-    run_name = ""
+    #run_name = ""
     resume = False
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(

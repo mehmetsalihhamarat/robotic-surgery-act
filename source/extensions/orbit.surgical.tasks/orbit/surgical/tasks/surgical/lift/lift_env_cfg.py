@@ -77,17 +77,16 @@ class CommandsCfg:
         asset_name="robot",
         body_name=MISSING,  # will be set by agent env cfg
         resampling_time_range=(1.0, 1.0),
-        debug_vis=False,
-        ranges=mdp.UniformPoseCommandCfg.Ranges(
-            pos_x=(-0.05, 0.05),
-            pos_y=(-0.05, 0.05),
-            pos_z=(-0.12, -0.12),
+        debug_vis=True,
+        ranges=mdp.UniformPoseCommandCfg.Ranges(	# GOAL RANGES
+            pos_x=(0.0, 0.0), # -0.05 <==> 0.05
+            pos_y=(0.0, 0.0), # -0.05 <==> 0.05
+            pos_z=(-0.1, -0.1),
             roll=(0.0, 0.0),
             pitch=(0.0, 0.0),
             yaw=(0.0, 0.0),
         ),
     )
-
 
 @configclass
 class ActionsCfg:
@@ -130,12 +129,12 @@ class EventCfg:
         func=mdp.reset_root_state_uniform,
         mode="reset",
         params={
-            "pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)},
+            "pose_range": {"x": (0.0, 0.0), "y": (0.0, 0.0), "z": (0.0, 0.0)},
             "velocity_range": {},
             "asset_cfg": SceneEntityCfg("object", body_names="Object"),
         },
     )
-
+#"pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)},
 
 @configclass
 class RewardsCfg:

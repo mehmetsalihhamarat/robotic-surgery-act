@@ -60,7 +60,7 @@ class NeedleLiftEnvCfg(LiftEnvCfg):
             init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.015), rot=(1, 0, 0, 0)),
             spawn=UsdFileCfg(
                 usd_path=f"{ORBITSURGICAL_ASSETS_DATA_DIR}/Props/Surgical_needle/needle_sdf.usd",
-                scale=(0.4, 0.4, 0.4),
+                scale=(0.4, 0.4, 0.4), ## !!
                 rigid_props=RigidBodyPropertiesCfg(
                     solver_position_iteration_count=16,
                     solver_velocity_iteration_count=8,
@@ -74,7 +74,7 @@ class NeedleLiftEnvCfg(LiftEnvCfg):
 
         # Listens to the required transforms
         marker_cfg = FRAME_MARKER_CFG.copy()
-        marker_cfg.markers["frame"].scale = (0.02, 0.02, 0.02)
+        marker_cfg.markers["frame"].scale = (0.002, 0.002, 0.002)
         marker_cfg.prim_path = "/Visuals/FrameTransformer"
         self.scene.ee_frame = FrameTransformerCfg(
             prim_path="{ENV_REGEX_NS}/Robot/psm_base_link",
@@ -87,7 +87,6 @@ class NeedleLiftEnvCfg(LiftEnvCfg):
                 ),
             ],
         )
-
 
 @configclass
 class NeedleLiftEnvCfg_PLAY(NeedleLiftEnvCfg):

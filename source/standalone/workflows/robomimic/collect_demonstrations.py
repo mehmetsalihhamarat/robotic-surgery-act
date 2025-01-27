@@ -88,7 +88,7 @@ def main():
     if args_cli.teleop_device.lower() == "keyboard":
         teleop_interface = Se3Keyboard(pos_sensitivity=0.04, rot_sensitivity=0.08)
     elif args_cli.teleop_device.lower() == "spacemouse":
-        teleop_interface = Se3SpaceMouse(pos_sensitivity=0.05, rot_sensitivity=0.005)
+        teleop_interface = Se3SpaceMouse(pos_sensitivity=0.05*0.1, rot_sensitivity=0.005)
     else:
         raise ValueError(f"Invalid device interface '{args_cli.teleop_device}'. Supported: 'keyboard', 'spacemouse'.")
     # add teleoperation key for env reset
