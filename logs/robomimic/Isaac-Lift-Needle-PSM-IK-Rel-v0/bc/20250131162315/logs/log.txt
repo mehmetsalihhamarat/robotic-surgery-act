@@ -1,0 +1,38 @@
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: low_dim with keys: ['object_position', 'target_object_position', 'joint_vel', 'joint_pos']
+using obs modality: rgb with keys: []
+using obs modality: depth with keys: []
+using obs modality: scan with keys: []
+
+============= Loaded Environment Metadata =============
+obs key joint_pos with shape (8,)
+obs key joint_vel with shape (8,)
+obs key object_position with shape (3,)
+obs key target_object_position with shape (7,)
+WARNING: could not load d4rl environments!
+run failed with error:
+Environment `Isaac-Lift-Needle-PSM-IK-Rel` doesn't exist.
+
+Traceback (most recent call last):
+  File "/home/nural/orbit-surgical/source/standalone/workflows/robomimic/train.py", line 387, in main
+    train(config, device=device)
+  File "/home/nural/orbit-surgical/source/standalone/workflows/robomimic/train.py", line 130, in train
+    env = EnvUtils.create_env_from_metadata(
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/robomimic/utils/env_utils.py", line 229, in create_env_from_metadata
+    env = create_env(
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/robomimic/utils/env_utils.py", line 174, in create_env
+    env = env_class(
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/robomimic/envs/env_gym.py", line 51, in __init__
+    self.env = gym.make(env_name, **kwargs)
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/gym/envs/registration.py", line 676, in make
+    return registry.make(id, **kwargs)
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/gym/envs/registration.py", line 490, in make
+    versions = self.env_specs.versions(namespace, name)
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/gym/envs/registration.py", line 220, in versions
+    self._assert_name_exists(namespace, name)
+  File "/home/nural/miniconda3/envs/orbitsurgical/lib/python3.10/site-packages/gym/envs/registration.py", line 297, in _assert_name_exists
+    raise error.NameNotFound(message)
+gym.error.NameNotFound: Environment `Isaac-Lift-Needle-PSM-IK-Rel` doesn't exist.
+

@@ -1,0 +1,626 @@
+--- git status ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/__init__.py
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/lift_env_cfg.py
+	modified:   source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/reach/config/psm/agents/rsl_rl_cfg.py
+	modified:   source/standalone/workflows/rsl_rl/play.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	logs_previous/
+	source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/Backup/bcq copy.json
+
+no changes added to commit (use "git add" and/or "git commit -a") 
+
+
+--- git diff ---
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/__init__.py b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/__init__.py
+index 8948f13..f7d1b19 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/__init__.py
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/__init__.py
+@@ -77,6 +77,7 @@ gym.register(
+         "robomimic_iql_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iql.json",
+         "robomimic_gl_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/gl.json",
+         "robomimic_hbc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json",
++        "robomimic_td3_bc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json",
+     },
+     disable_env_checker=True,
+ )
+@@ -94,6 +95,7 @@ gym.register(
+         "robomimic_iql_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iql.json",
+         "robomimic_gl_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/gl.json",
+         "robomimic_hbc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json",
++        "robomimic_td3_bc_cfg_entry_point": "/home/nural/orbit-surgical/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json",
+     },
+     disable_env_checker=True,
+ )
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json
+index 575596e..03465cd 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bc.json
+@@ -10,33 +10,33 @@
+         "save": {
+             "enabled": true,
+             "every_n_seconds": null,
+-            "every_n_epochs": 1,
++            "every_n_epochs": 10,
+             "epochs": [],
+             "on_best_validation": false,
+             "on_best_rollout_return": false,
+             "on_best_rollout_success_rate": true
+         },
+-        "epoch_every_n_steps": 10,
+-        "validation_epoch_every_n_steps": 1,
+-        "env": "Isaac-Lift-Needle-PSM-IK-Rel-v0",
++        "epoch_every_n_steps": 100,
++        "validation_epoch_every_n_steps": 10,
++        "env": null,
+         "additional_envs": null,
+         "render": false,
+         "render_video": true,
+-        "keep_all_videos": true,
++        "keep_all_videos": false,
+         "video_skip": 5,
+         "rollout": {
+             "enabled": false,
+-            "n": 50,
+-            "horizon": 400,
+-            "rate": 50,
+-            "warmstart": 0,
++            "n": 10,
++            "horizon": 1000,
++            "rate": 10,
++            "warmstart": 10,
+             "terminate_on_success": true
+         }
+     },
+     "train": {
+         "data": null,
+         "output_dir": "../bc_trained_models",
+-        "num_data_workers": 4,
++        "num_data_workers": 0,
+         "hdf5_cache_mode": "all",
+         "hdf5_use_swmr": true,
+         "hdf5_normalize_obs": false,
+@@ -46,41 +46,42 @@
+         "dataset_keys": [
+             "actions",
+             "rewards",
+-            "dones"
++            "dones",
++            "success"
+         ],
+         "goal_mode": null,
+         "cuda": true,
+         "batch_size": 256,
+-        "num_epochs": 1000,
++        "num_epochs": 200,
+         "seed": 1
+     },
+     "algo": {
+         "optim_params": {
+             "policy": {
+                 "learning_rate": {
+-                    "initial": 0.05,
+-                    "decay_factor": 0.09,
++                    "initial": 0.0001,
++                    "decay_factor": 0.1,
+                     "epoch_schedule": []
+                 },
+                 "regularization": {
+-                    "L2": 0.01
++                    "L2": 0.0
+                 }
+             }
+         },
+         "loss": {
+             "l2_weight": 1.0,
+-            "l1_weight": 0.1,
+-            "cos_weight": 0.1
++            "l1_weight": 0.0,
++            "cos_weight": 0.0
+         },
+         "actor_layer_dims": [
+-            512,
+-            512
++            1024,
++            1024
+         ],
+         "gaussian": {
+-            "enabled": true,
+-            "fixed_std": true,
+-            "init_std": 0.05,
+-            "min_std": 0.0001,
++            "enabled": false,
++            "fixed_std": false,
++            "init_std": 0.1,
++            "min_std": 0.01,
+             "std_activation": "softplus",
+             "low_noise_eval": true
+         },
+@@ -114,22 +115,22 @@
+                 "categorical_min_temp": 0.3
+             },
+             "encoder_layer_dims": [
+-                512,
+-                512
++                300,
++                400
+             ],
+             "decoder_layer_dims": [
+-                512,
+-                512
++                300,
++                400
+             ],
+             "prior_layer_dims": [
+-                512,
+-                512
++                300,
++                400
+             ]
+         },
+         "rnn": {
+             "enabled": false,
+             "horizon": 10,
+-            "hidden_dim": 512,
++            "hidden_dim": 400,
+             "rnn_type": "LSTM",
+             "num_layers": 2,
+             "open_loop": false,
+@@ -261,4 +262,4 @@
+             }
+         }
+     }
+-}
++}
+\ No newline at end of file
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json
+index 9b7cf58..d4e8608 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/bcq.json
+@@ -10,14 +10,14 @@
+         "save": {
+             "enabled": true,
+             "every_n_seconds": null,
+-            "every_n_epochs": 50,
++            "every_n_epochs": 10,
+             "epochs": [],
+             "on_best_validation": true,
+             "on_best_rollout_return": false,
+             "on_best_rollout_success_rate": false
+         },
+         "epoch_every_n_steps": 100,
+-        "validation_epoch_every_n_steps": 10,
++        "validation_epoch_every_n_steps": 5,
+         "env": null,
+         "additional_envs": null,
+         "render": false,
+@@ -50,61 +50,61 @@
+         ],
+         "goal_mode": null,
+         "cuda": true,
+-        "batch_size": 8,
+-        "num_epochs": 600,
++        "batch_size": 100,
++        "num_epochs": 200,
+         "seed": 1
+     },
+     "algo": {
+         "optim_params": {
+             "critic": {
+                 "learning_rate": {
+-                    "initial": 0.0005,
+-                    "decay_factor": 0.5,
+-                    "epoch_schedule": [300, 500]
++                    "initial": 0.001,
++                    "decay_factor": 0.1,
++                    "epoch_schedule": []
+                 },
+                 "regularization": {
+-                    "L2": 0.0005
++                    "L2": 0.0
+                 },
+-                "start_epoch": 0,
+-                "end_epoch": 600
++                "start_epoch": -1,
++                "end_epoch": -1
+             },
+             "action_sampler": {
+                 "learning_rate": {
+-                    "initial": 0.0005,
+-                    "decay_factor": 0.5,
+-                    "epoch_schedule": [300, 500]
++                    "initial": 0.001,
++                    "decay_factor": 0.1,
++                    "epoch_schedule": []
+                 },
+                 "regularization": {
+-                    "L2": 0.0005
++                    "L2": 0.0
+                 },
+-                "start_epoch": 0,
+-                "end_epoch": 600
++                "start_epoch": -1,
++                "end_epoch": -1
+             },
+             "actor": {
+                 "learning_rate": {
+-                    "initial": 0.0005,
+-                    "decay_factor": 0.5,
+-                    "epoch_schedule": [300, 500]
++                    "initial": 0.001,
++                    "decay_factor": 0.1,
++                    "epoch_schedule": []
+                 },
+                 "regularization": {
+-                    "L2": 0.0005
++                    "L2": 0.0
+                 },
+-                "start_epoch": 0,
+-                "end_epoch": 600
++                "start_epoch": -1,
++                "end_epoch": -1
+             }
+         },
+         "discount": 0.99,
+         "n_step": 1,
+-        "target_tau": 0.01,
++        "target_tau": 0.005,
+         "infinite_horizon": false,
+         "critic": {
+-            "use_huber": true,
+-            "max_gradient_norm": 5.0,
++            "use_huber": false,
++            "max_gradient_norm": null,
+             "value_bounds": null,
+-            "num_action_samples": 100,
+-            "num_action_samples_rollout": 200,
++            "num_action_samples": 10,
++            "num_action_samples_rollout": 100,
+             "ensemble": {
+-                "n": 3,
++                "n": 2,
+                 "weight": 0.75
+             },
+             "distributional": {
+@@ -112,14 +112,14 @@
+                 "num_atoms": 51
+             },
+             "layer_dims": [
+-                512,
+-                512
++                300,
++                400
+             ]
+         },
+         "action_sampler": {
+             "actor_layer_dims": [
+-                512,
+-                512
++                1024,
++                1024
+             ],
+             "gmm": {
+                 "enabled": false,
+@@ -130,7 +130,7 @@
+             },
+             "vae": {
+                 "enabled": true,
+-                "latent_dim": 8,
++                "latent_dim": 14,
+                 "latent_clip": null,
+                 "kl_weight": 1.0,
+                 "decoder": {
+@@ -151,26 +151,26 @@
+                     "categorical_min_temp": 0.3
+                 },
+                 "encoder_layer_dims": [
+-                    512,
+-                    512
++                    300,
++                    400
+                 ],
+                 "decoder_layer_dims": [
+-                    512,
+-                    512
++                    300,
++                    400
+                 ],
+                 "prior_layer_dims": [
+-                    512,
+-                    512
++                    300,
++                    400
+                 ]
+             },
+-            "freeze_encoder_epoch": 300
++            "freeze_encoder_epoch": -1
+         },
+         "actor": {
+-            "enabled": true,
+-            "perturbation_scale": 0.0001,
++            "enabled": false,
++            "perturbation_scale": 0.05,
+             "layer_dims": [
+-                512,
+-                512
++                300,
++                400
+             ]
+         }
+     },
+@@ -297,4 +297,4 @@
+             }
+         }
+     }
+-}
++}
+\ No newline at end of file
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json
+index d8ef19b..603820f 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/cql.json
+@@ -2,7 +2,7 @@
+     "algo_name": "cql",
+     "experiment": {
+         "name": "cql",
+-        "validate": true,
++        "validate": false,
+         "logging": {
+             "terminal_output_to_txt": true,
+             "log_tb": true,
+@@ -44,7 +44,7 @@
+         "hdf5_load_next_obs": true,
+         "hdf5_normalize_obs": false,
+         "hdf5_filter_key": "train",
+-        "hdf5_validation_filter_key": "valid",
++        "hdf5_validation_filter_key": null,
+         "seq_length": 1,
+         "pad_seq_length": true,
+         "frame_stack": 1,
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json
+index 294eb4c..34accf2 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/hbc.json
+@@ -57,7 +57,7 @@
+         "goal_mode": null,
+         "cuda": true,
+         "batch_size": 32,
+-        "num_epochs": 50,
++        "num_epochs": 200,
+         "seed": 42
+     },
+     "algo": {
+@@ -77,7 +77,7 @@
+                     "learning_rate": {
+                         "initial": 0.0001,
+                         "decay_factor": 0.5,
+-                        "epoch_schedule": [500, 1000, 1500]
++                        "epoch_schedule": []
+                     },
+                     "regularization": {
+                         "L2": 0.0
+@@ -152,7 +152,7 @@
+                 1024
+             ],
+             "rnn": {
+-                "enabled": true,
++                "enabled": false,
+                 "horizon": 10,
+                 "hidden_dim": 256,
+                 "rnn_type": "LSTM",
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json
+index 3ba8680..634f3a7 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/iris.json
+@@ -2,7 +2,7 @@
+     "algo_name": "iris",
+     "experiment": {
+         "name": "iris",
+-        "validate": true,
++        "validate": false,
+         "logging": {
+             "terminal_output_to_txt": true,
+             "log_tb": true,
+@@ -36,7 +36,7 @@
+         }
+     },
+     "train": {
+-        "data": "logs/robomimic/Isaac-Lift-Needle-PSM-IK-Rel-v0/hdf_dataset.hdf5",
++        "data": null,
+         "output_dir": "../iris_trained_models",
+         "num_data_workers": 0,
+         "hdf5_cache_mode": "all",
+@@ -44,7 +44,7 @@
+         "hdf5_load_next_obs": true,
+         "hdf5_normalize_obs": false,
+         "hdf5_filter_key": "train",
+-        "hdf5_validation_filter_key": "valid",
++        "hdf5_validation_filter_key": null,
+         "seq_length": 10,
+         "pad_seq_length": true,
+         "frame_stack": 1,
+@@ -52,12 +52,13 @@
+         "dataset_keys": [
+             "actions",
+             "rewards",
+-            "dones"
++            "dones",
++            "success"
+         ],
+         "goal_mode": null,
+         "cuda": true,
+         "batch_size": 100,
+-        "num_epochs": 2000,
++        "num_epochs": 200,
+         "seed": 1
+     },
+     "algo": {
+@@ -275,7 +276,7 @@
+                 1024
+             ],
+             "rnn": {
+-                "enabled": true,
++                "enabled": false,
+                 "horizon": 10,
+                 "hidden_dim": 400,
+                 "rnn_type": "LSTM",
+@@ -413,7 +414,7 @@
+             "modalities": {
+                 "obs": {
+                     "low_dim": [
+-                        "joint_pos",
++                            "joint_pos",
+                             "joint_vel",
+                             "object_position",
+                             "target_object_position"
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json
+index 85ea854..c33da2b 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/config/needle/agents/robomimic/td3_bc.json
+@@ -1,7 +1,7 @@
+ {
+     "algo_name": "td3_bc",
+     "experiment": {
+-        "name": "test",
++        "name": "td3_bc",
+         "validate": false,
+         "logging": {
+             "terminal_output_to_txt": true,
+@@ -36,7 +36,7 @@
+         }
+     },
+     "train": {
+-        "data": "logs/robomimic/Isaac-Lift-Needle-PSM-IK-Rel-v0/hdf_dataset.hdf5",
++        "data": null,
+         "output_dir": "../td3_bc_trained_models",
+         "num_data_workers": 0,
+         "hdf5_cache_mode": "all",
+@@ -52,7 +52,8 @@
+         "dataset_keys": [
+             "actions",
+             "rewards",
+-            "dones"
++            "dones",
++            "success"
+         ],
+         "goal_mode": null,
+         "cuda": true,
+@@ -119,6 +120,7 @@
+         "modalities": {
+             "obs": {
+                 "low_dim": [
++                    "actions",
+                     "joint_pos",
+                     "joint_vel",
+                     "object_position",
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/lift_env_cfg.py b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/lift_env_cfg.py
+index 1d711a5..d476ecf 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/lift_env_cfg.py
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/lift/lift_env_cfg.py
+@@ -134,34 +134,35 @@ class EventCfg:
+             "asset_cfg": SceneEntityCfg("object", body_names="Object"),
+         },
+     )
+-#"pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)},
++#"pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)}, 
++# Defining needle initial position in x-y-z.
+ 
+ @configclass
+ class RewardsCfg:
+     """Reward terms for the MDP."""
+ 
+-    reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0)
++    reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0) # 0.1 - 1
+ 
+-    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.02}, weight=15.0)
++    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.02}, weight=15.0) # 0.02 - 15
+ 
+     object_goal_tracking = RewTerm(
+         func=mdp.object_goal_distance,
+-        params={"std": 0.3, "minimal_height": 0.02, "command_name": "object_pose"},
+-        weight=16.0,
++        params={"std": 0.3, "minimal_height": 0.02, "command_name": "object_pose"}, # 0.3 - 0.02
++        weight=16.0, # 16
+     )
+ 
+     object_goal_tracking_fine_grained = RewTerm(
+         func=mdp.object_goal_distance,
+-        params={"std": 0.05, "minimal_height": 0.02, "command_name": "object_pose"},
+-        weight=5.0,
++        params={"std": 0.05, "minimal_height": 0.02, "command_name": "object_pose"}, # 0.05 - 0.02
++        weight=5.0, # 5
+     )
+ 
+     # action penalty
+-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-1e-3)
++    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-1e-3) # -1e-3
+ 
+     joint_vel = RewTerm(
+         func=mdp.joint_vel_l2,
+-        weight=-1e-4,
++        weight=-1e-4, # -1e-4
+         params={"asset_cfg": SceneEntityCfg("robot")},
+     )
+ 
+@@ -200,7 +201,7 @@ class LiftEnvCfg(ManagerBasedRLEnvCfg):
+     """Configuration for the lifting environment."""
+ 
+     # Scene settings
+-    scene: ObjectTableSceneCfg = ObjectTableSceneCfg(num_envs=4096, env_spacing=2.5)
++    scene: ObjectTableSceneCfg = ObjectTableSceneCfg(num_envs=4096, env_spacing=2.5) # 4096 - 2.5
+     # Basic settings
+     observations: ObservationsCfg = ObservationsCfg()
+     actions: ActionsCfg = ActionsCfg()
+@@ -214,10 +215,10 @@ class LiftEnvCfg(ManagerBasedRLEnvCfg):
+     def __post_init__(self):
+         """Post initialization."""
+         # general settings
+-        self.decimation = 4
++        self.decimation = 4 #4
+         self.sim.render_interval = self.decimation
+         self.episode_length_s = 2.0
+         # simulation settings
+-        self.sim.dt = 1.0 / 200.0
++        self.sim.dt = 1 / 200 # 0.005
+         self.viewer.eye = (0.2, 0.2, 0.1)
+         self.viewer.lookat = (0.0, 0.0, 0.04)
+diff --git a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/reach/config/psm/agents/rsl_rl_cfg.py b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/reach/config/psm/agents/rsl_rl_cfg.py
+index 78eb66c..2c318f9 100644
+--- a/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/reach/config/psm/agents/rsl_rl_cfg.py
++++ b/source/extensions/orbit.surgical.tasks/orbit/surgical/tasks/surgical/reach/config/psm/agents/rsl_rl_cfg.py
+@@ -18,7 +18,7 @@ class PSMReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+     max_iterations = 2001
+     save_interval = 50
+     experiment_name = "psm_reach"
+-    #run_name = ""
++    run_name = ""
+     resume = False
+     empirical_normalization = False
+     policy = RslRlPpoActorCriticCfg(
+diff --git a/source/standalone/workflows/rsl_rl/play.py b/source/standalone/workflows/rsl_rl/play.py
+index 20d91a3..427ef96 100644
+--- a/source/standalone/workflows/rsl_rl/play.py
++++ b/source/standalone/workflows/rsl_rl/play.py
+@@ -69,7 +69,8 @@ def main():
+     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
+     log_root_path = os.path.abspath(log_root_path)
+     print(f"[INFO] Loading experiment from directory: {log_root_path}")
+-    resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
++    #resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
++    resume_path = "/home/nural/orbit-surgical/logs/rsl_rl/needle_lift/2025-01-30_23-20-54/model_200.pt"
+     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
+ 
+     # load previously trained model
