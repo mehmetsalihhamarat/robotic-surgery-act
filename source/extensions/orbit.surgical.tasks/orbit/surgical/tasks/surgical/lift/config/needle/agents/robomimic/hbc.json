@@ -57,7 +57,7 @@
         "goal_mode": null,
         "cuda": true,
         "batch_size": 32,
-        "num_epochs": 50,
+        "num_epochs": 200,
         "seed": 42
     },
     "algo": {
@@ -77,7 +77,7 @@
                     "learning_rate": {
                         "initial": 0.0001,
                         "decay_factor": 0.5,
-                        "epoch_schedule": [500, 1000, 1500]
+                        "epoch_schedule": []
                     },
                     "regularization": {
                         "L2": 0.0
@@ -152,7 +152,7 @@
                 1024
             ],
             "rnn": {
-                "enabled": true,
+                "enabled": false,
                 "horizon": 10,
                 "hidden_dim": 256,
                 "rnn_type": "LSTM",

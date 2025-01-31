@@ -79,8 +79,8 @@ class CommandsCfg:
         resampling_time_range=(1.0, 1.0),
         debug_vis=True,
         ranges=mdp.UniformPoseCommandCfg.Ranges(	# GOAL RANGES
-            pos_x=(0.0, 0.0), # -0.05 <==> 0.05
-            pos_y=(0.0, 0.0), # -0.05 <==> 0.05
+            pos_x=(-0.01, 0.01), # -0.05 <==> 0.05
+            pos_y=(-0.01, 0.01), # -0.05 <==> 0.05
             pos_z=(-0.1, -0.1),
             roll=(0.0, 0.0),
             pitch=(0.0, 0.0),
@@ -129,39 +129,40 @@ class EventCfg:
         func=mdp.reset_root_state_uniform,
         mode="reset",
         params={
-            "pose_range": {"x": (0.0, 0.0), "y": (0.0, 0.0), "z": (0.0, 0.0)},
+            "pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)},
             "velocity_range": {},
             "asset_cfg": SceneEntityCfg("object", body_names="Object"),
         },
     )
-#"pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)},
+#"pose_range": {"x": (-0.03, 0.03), "y": (-0.03, 0.03), "z": (0.0, 0.0)}, 
+# Defining needle initial position in x-y-z.
 
 @configclass
 class RewardsCfg:
     """Reward terms for the MDP."""
 
-    reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0)
+    reaching_object = RewTerm(func=mdp.object_ee_distance, params={"std": 0.1}, weight=1.0) # 0.1 - 1
 
-    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.02}, weight=15.0)
+    lifting_object = RewTerm(func=mdp.object_is_lifted, params={"minimal_height": 0.02}, weight=15.0) # 0.02 - 15
 
     object_goal_tracking = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.3, "minimal_height": 0.02, "command_name": "object_pose"},
-        weight=16.0,
+        params={"std": 0.3, "minimal_height": 0.02, "command_name": "object_pose"}, # 0.3 - 0.02
+        weight=16.0, # 16
     )
 
     object_goal_tracking_fine_grained = RewTerm(
         func=mdp.object_goal_distance,
-        params={"std": 0.05, "minimal_height": 0.02, "command_name": "object_pose"},
-        weight=5.0,
+        params={"std": 0.05, "minimal_height": 0.02, "command_name": "object_pose"}, # 0.05 - 0.02
+        weight=5.0, # 5
     )
 
     # action penalty
-    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-1e-3)
+    action_rate = RewTerm(func=mdp.action_rate_l2, weight=-1e-3) # -1e-3
 
     joint_vel = RewTerm(
         func=mdp.joint_vel_l2,
-        weight=-1e-4,
+        weight=-1e-4, # -1e-4
         params={"asset_cfg": SceneEntityCfg("robot")},
     )
 
@@ -200,7 +201,7 @@ class LiftEnvCfg(ManagerBasedRLEnvCfg):
     """Configuration for the lifting environment."""
 
     # Scene settings
-    scene: ObjectTableSceneCfg = ObjectTableSceneCfg(num_envs=4096, env_spacing=2.5)
+    scene: ObjectTableSceneCfg = ObjectTableSceneCfg(num_envs=4096, env_spacing=2.5) # 4096 - 2.5
     # Basic settings
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
@@ -214,10 +215,10 @@ class LiftEnvCfg(ManagerBasedRLEnvCfg):
     def __post_init__(self):
         """Post initialization."""
         # general settings
-        self.decimation = 4
+        self.decimation = 4 #4
         self.sim.render_interval = self.decimation
         self.episode_length_s = 2.0
         # simulation settings
-        self.sim.dt = 1.0 / 200.0
+        self.sim.dt = 1 / 200 # 0.005
         self.viewer.eye = (0.2, 0.2, 0.1)
         self.viewer.lookat = (0.0, 0.0, 0.04)

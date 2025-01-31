@@ -18,7 +18,7 @@ class PSMReachPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     max_iterations = 2001
     save_interval = 50
     experiment_name = "psm_reach"
-    #run_name = ""
+    run_name = ""
     resume = False
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(

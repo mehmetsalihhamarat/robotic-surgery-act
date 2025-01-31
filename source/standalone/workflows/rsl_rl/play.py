@@ -69,7 +69,9 @@ def main():
     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
     print(f"[INFO] Loading experiment from directory: {log_root_path}")
-    resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
+    #resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
+    #resume_path = "/home/nural/orbit-surgical/logs/rsl_rl/needle_lift_fixed_obj_pos/2025-01-31_00-12-22/model_2999.pt"
+    resume_path = "/home/nural/orbit-surgical/logs/rsl_rl/needle_lift/2025-01-31_01-49-48/model_2999.pt"
     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
 
     # load previously trained model

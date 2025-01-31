@@ -1,7 +1,7 @@
 {
     "algo_name": "td3_bc",
     "experiment": {
-        "name": "test",
+        "name": "td3_bc",
         "validate": false,
         "logging": {
             "terminal_output_to_txt": true,
@@ -36,7 +36,7 @@
         }
     },
     "train": {
-        "data": "logs/robomimic/Isaac-Lift-Needle-PSM-IK-Rel-v0/hdf_dataset.hdf5",
+        "data": null,
         "output_dir": "../td3_bc_trained_models",
         "num_data_workers": 0,
         "hdf5_cache_mode": "all",
@@ -52,7 +52,8 @@
         "dataset_keys": [
             "actions",
             "rewards",
-            "dones"
+            "dones",
+            "success"
         ],
         "goal_mode": null,
         "cuda": true,
@@ -119,6 +120,7 @@
         "modalities": {
             "obs": {
                 "low_dim": [
+                    "actions",
                     "joint_pos",
                     "joint_vel",
                     "object_position",

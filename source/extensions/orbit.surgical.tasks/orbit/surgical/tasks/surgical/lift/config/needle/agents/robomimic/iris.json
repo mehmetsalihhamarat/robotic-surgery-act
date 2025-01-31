@@ -2,7 +2,7 @@
     "algo_name": "iris",
     "experiment": {
         "name": "iris",
-        "validate": true,
+        "validate": false,
         "logging": {
             "terminal_output_to_txt": true,
             "log_tb": true,
@@ -36,7 +36,7 @@
         }
     },
     "train": {
-        "data": "logs/robomimic/Isaac-Lift-Needle-PSM-IK-Rel-v0/hdf_dataset.hdf5",
+        "data": null,
         "output_dir": "../iris_trained_models",
         "num_data_workers": 0,
         "hdf5_cache_mode": "all",
@@ -44,7 +44,7 @@
         "hdf5_load_next_obs": true,
         "hdf5_normalize_obs": false,
         "hdf5_filter_key": "train",
-        "hdf5_validation_filter_key": "valid",
+        "hdf5_validation_filter_key": null,
         "seq_length": 10,
         "pad_seq_length": true,
         "frame_stack": 1,
@@ -52,12 +52,13 @@
         "dataset_keys": [
             "actions",
             "rewards",
-            "dones"
+            "dones",
+            "success"
         ],
         "goal_mode": null,
         "cuda": true,
         "batch_size": 100,
-        "num_epochs": 2000,
+        "num_epochs": 200,
         "seed": 1
     },
     "algo": {
@@ -275,7 +276,7 @@
                 1024
             ],
             "rnn": {
-                "enabled": true,
+                "enabled": false,
                 "horizon": 10,
                 "hidden_dim": 400,
                 "rnn_type": "LSTM",
@@ -413,7 +414,7 @@
             "modalities": {
                 "obs": {
                     "low_dim": [
-                        "joint_pos",
+                            "joint_pos",
                             "joint_vel",
                             "object_position",
                             "target_object_position"
